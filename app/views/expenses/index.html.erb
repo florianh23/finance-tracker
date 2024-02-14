@@ -3,6 +3,17 @@
     <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
   <% end %>
 
+  <div class="flex justify-start space-x-2 mb-4">
+    <%= link_to expenses_path do%>
+      <div class="bg-blue-600 rounded-lg py-3 px-5 text-white hover:bg-blue-300">All</div>
+    <% end %>
+    <% @months.each do |month|%>
+      <%= link_to expenses_path(month: month) do%>
+        <div class="bg-blue-600 rounded-lg py-3 px-5 text-white hover:bg-blue-300"><%= month %></div>
+      <% end %>
+    <% end %>
+  </div>
+
   <div class="flex justify-between items-center">
     <h1 class="font-bold text-4xl">Expenses (<%= @expenses.map(&:amount).sum%>€)</h1>
     <%= link_to "New expense", new_expense_path, class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium" %>

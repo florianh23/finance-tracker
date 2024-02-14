@@ -2,7 +2,7 @@
   <td><%= expense.name.truncate(20) %></td>
   <td><%= expense.date %></td>
   <td><%= expense.amount %>€</td>
-  <td><%= expense.description.truncate(20) %></td>
+  <td><%= expense.description&.truncate(20) %></td>
   <td><%= link_to "Show this expense", edit_expense_path(expense), class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %></td>
   <td><%= link_to "Delete this expense", expense_path(expense), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %></td>
 </tr>

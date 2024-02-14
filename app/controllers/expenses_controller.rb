@@ -3,7 +3,12 @@ class ExpensesController < ApplicationController
 
   # GET /expenses or /expenses.json
   def index
-    @expenses = Expense.all
+    @expenses = if params[:month]
+                  Expense.where('extract(month from date) = ?', Date::MONTHNAMES.index(params[:month]))
+                else
+                  Expense.all
+                end
+    @months = Date.today.all_year.map { |date| date.strftime('%B') }.uniq
     @expenses_by_month = @expenses.group_by { |expense| expense.date.strftime('%Y-%m') }
     @expenses_by_day = @expenses.order(date: :desc).group_by { |expense| expense.date.strftime('%A, %d %B ') }
   end
