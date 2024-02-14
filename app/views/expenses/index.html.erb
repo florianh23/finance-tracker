@@ -19,6 +19,8 @@
     <%= link_to "New expense", new_expense_path, class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium" %>
   </div>
 
+  <canvas id='myChart' width='400px' height='120px' data-labels="<%= params[:month] ? @days_in_month : @months %>" data-data="<%= params[:month] ? @values_per_day : @monthly_sums %>"></canvas>
+
   <div id="expenses" class="min-w-full mt-4 rounded-lg">
     <% @expenses_by_day.each do |day, expenses| %>
       <div class="flex justify-between">
@@ -29,11 +31,12 @@
       <thead class="bg-blue-600 text-white rounded-md text-left">
         <tr class="rounded-md">
           <th class="min-w-[30px] p-2 font-medium">Name</th>
-          <th class="min-w-[30px] p-2">Date</th>
-          <th class="min-w-[30px] p-2">Amount</th>
-          <th class="min-w-[30px] p-2">Description</th>
-          <th class="min-w-[30px] p-2">Edit</th>
-          <th class="min-w-[30px] p-2">Delete</th>
+          <th class="min-w-[30px] p-2 font-medium">Category</th>
+          <th class="min-w-[30px] p-2 font-medium">Date</th>
+          <th class="min-w-[30px] p-2 font-medium">Amount</th>
+          <th class="min-w-[30px] p-2 font-medium">Description</th>
+          <th class="min-w-[30px] p-2 font-medium">Edit</th>
+          <th class="min-w-[30px] p-2 font-medium">Delete</th>
         </tr>
       </thead>
       <tbody>

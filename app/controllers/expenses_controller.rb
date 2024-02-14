@@ -3,13 +3,35 @@ class ExpensesController < ApplicationController
 
   # GET /expenses or /expenses.json
   def index
-    @expenses = if params[:month]
-                  Expense.where('extract(month from date) = ?', Date::MONTHNAMES.index(params[:month]))
-                else
-                  Expense.all
-                end
+    @data_values = [0, 10, 5, 2, 20, 30, 45]
+    if params[:month]
+      @expenses = Expense.where('extract(month from date) = ?', Date::MONTHNAMES.index(params[:month]))
+
+      # Create a Date object for the first day of the specified month
+      first_day_of_month = Date.new(Date.today.year, Date::MONTHNAMES.index(params[:month]), 1)
+
+      # Calculate the last day of the specified month
+      last_day_of_month = first_day_of_month.end_of_month
+
+      # Generate an array of all days in the specified month using 'map'
+      @days_in_month = (first_day_of_month..last_day_of_month).map(&:day).to_a
+      @values_per_day = @days_in_month.map do |day|
+        @expenses.where('extract(day from date) = ?', day).sum(:amount)
+      end
+    else
+      @expenses = Expense.all
+    end
     @months = Date.today.all_year.map { |date| date.strftime('%B') }.uniq
-    @expenses_by_month = @expenses.group_by { |expense| expense.date.strftime('%Y-%m') }
+    @expenses_by_month = @expenses.order(date: :asc).group_by { |expense| expense.date.strftime('%Y-%m') }
+    @monthly_sums = []
+
+    @expenses_by_month.values.each do |month_expenses|
+      # Calculate the sum of expenses for the current month
+      total_amount = month_expenses.sum { |expense| expense.amount }
+
+      # Create a hash with month and total_amount
+      @monthly_sums << total_amount
+    end
     @expenses_by_day = @expenses.order(date: :desc).group_by { |expense| expense.date.strftime('%A, %d %B ') }
   end
 
@@ -68,6 +90,6 @@ class ExpensesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def expense_params
-    params.require(:expense).permit(:name, :date, :amount, :description)
+    params.require(:expense).permit(:name, :date, :amount, :description, :category_id)
   end
 end
