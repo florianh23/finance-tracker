@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ExpensesHelper
   def tailwind_color(category)
     color_variants = {
