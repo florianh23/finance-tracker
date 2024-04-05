@@ -16,8 +16,7 @@ jobs:
     services:
       db:
         image: postgres:latest
-        restart: always
-        environment:
+        env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: budgetapp_development
